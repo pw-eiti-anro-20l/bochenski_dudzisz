@@ -59,4 +59,4 @@ System składa się z dwóch węzłów pełniących rolę subskrybenta (subscrib
 
 ![Communication scheme](https://raw.githubusercontent.com/pw-eiti-anro-20l/bochenski_dudzisz/master/communication.png)
 
-Węzeł `/control` komunikuje się z węzłem `/turtle` przez wiadomości wysyłane pod adres `/turtle1/cmd_vel`.
+Węzeł `/control` komunikuje się z węzłem `/turtle` przez wiadomości wysyłane na temat `/turtle1/cmd_vel`.
