@@ -15,7 +15,7 @@ W komputerze z systemem Linux i zainstalowanymi pakietami ROS ([oficjalny poradn
 ## Dokumentacja
 Jako język programowania wybrany został Python. 
 
-### Plik turtle.launch - subscriber
+### Plik turtle.launch
 W pliku turtle.launch znajduje się się opis stworzonego systemu. Składa się z część definiującej węzeł żółwia z pakietu turtlesim, którym będziemy sterować (subscriber):
 
 ```<node pkg="turtlesim" name="turtle" type="turtlesim_node"/>```
