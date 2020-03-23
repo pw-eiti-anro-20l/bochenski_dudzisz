@@ -57,6 +57,6 @@ Funkcja `turtle_control()`dla bezpieczeństwa wykonywana jest w bloku `try`.
 ### Struktura systemu
 System składa się z dwóch węzłów pełniących rolę subskrybenta (subscriber) - żółw turtle, którym sterujemy, i nadawcy sygnałów (publisher) control - program odczytujący z klawiatury znaki i wysyłające je do subskrybentów (w tym przypadku jednego subskrybenta). Schemat komunikacji wygenerowany programem rqt_graph wygląda następująco:
 
-![Communication scheme](https://github.com/pw-eiti-anro-20l/bochenski_dudzisz/blob/master/anro/communication.png)
+![Communication scheme](https://raw.githubusercontent.com/pw-eiti-anro-20l/bochenski_dudzisz/master/communication.png)
 
 Węzeł `/control` komunikuje się z węzłem `/turtle` przez wiadomości wysyłane pod adres `/turtle1/cmd_vel`.
