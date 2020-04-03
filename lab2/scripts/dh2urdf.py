@@ -1,12 +1,12 @@
 import json
 from tf.transformations import *
 
-with open('../dh_file.json') as input_file:
+with open('../param_files/dh_file.json') as input_file:
 	dh = json.load(input_file)
 
 X, Y, Z = (1, 0, 0), (0, 1, 0), (0, 0, 1)
 
-with open('../urdf_params.yaml', 'w') as output_file:
+with open('../param_files/urdf_params.yaml', 'w') as output_file:
 	row_number = 0
 	for row in dh:
 		row_number += 1

@@ -1,10 +1,9 @@
 <launch>
-	<!--rosparam command="load" file="../output.yaml" / tak: command="load" file="../output.yaml"-->
-	<!--rosparam name="xd" command="load" file="../output.yaml"/-->
-	<arg name="xacro_parameters_filename" default="../urdf_params.yaml" />
-	<param name="robot_description" command="$(find xacro)/xacro --inorder '../urdf/lab2_robot.xacro' params_filename:=$(arg xacro_parameters_filename)"/>
 
-	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
-	<node name="rviz" pkg="rviz" type="rviz" args="-f base_link" required="true"/>
+    <param name="robot_description" command="xacro '$(find lab2)/urdf/static_robot.xacro'"/>
 
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-f base_link" required="true"/>
+    
 </launch>
+

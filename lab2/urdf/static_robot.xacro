@@ -4,17 +4,21 @@
 
     <!-- XACRO THINGS -->
     <!-- loading robot parameters -->
-    <xacro:arg name="params_filename" default="../urdf_params.yaml"/>
-    <xacro:property name="params_file" value="$(arg params_filename)"/>
+    <xacro:property name="params_file" value="../param_files/urdf_params.yaml"/>
     <xacro:property name="robot_params" value="${load_yaml(params_file)}"/>
     <xacro:property name="joint1_params" value="${robot_params[0]}"/>
     <xacro:property name="joint2_params" value="${robot_params[1]}"/>
     <xacro:property name="joint3_params" value="${robot_params[2]}"/>
 
+
+    <!-- local variables -->
+    <xacro:property name="link_width" value="0.04"/>
+    <xacro:property name="tool_length" value="0.2"/>
+    
     <!-- macros -->
 
     <xacro:macro name="default_joint" params="joint_params">
-        <joint name="joint${joint_params['nr']}" type="continuous">
+        <joint name="joint${joint_params['nr']}" type="fixed">
             <parent link="link${joint_params['nr'] - 1}"/>
             <child link="link${joint_params['nr']}"/>
             <origin xyz="${joint_params['xyz']}" rpy="${joint_params['rpy']}"/>
@@ -22,15 +26,11 @@
         </joint>
     </xacro:macro>
 
-    <material name="blue">
-        <color rgba="0 0 0.9 1"/>
-    </material>
-
     <xacro:macro name="default_link" params="joint_params">
         <link name="link${joint_params['nr'] - 1}">
             <visual>
                 <geometry>
-                    <cylinder length="${joint_params['link_length']}" radius="0.05"/>
+                    <box size="${joint_params['link_length']} ${link_width} ${link_width}"/>
                 </geometry>
                 <origin xyz="${joint_params['link_xyz']}" rpy="${joint_params['link_rpy']}"/>
                 <material name="blue"/>
@@ -38,19 +38,25 @@
         </link>
     </xacro:macro>
 
+    <!-- materials -->
 
+    <material name="blue">
+        <color rgba="0 0 0.9 1"/>
+    </material>
+
+    <material name="yellow">
+        <color rgba="1 1 0 1"/>
+    </material>
+
+    <material name="green">
+        <color rgba="0 1 0 1"/>
+    </material>
 
     
     <!-- ROBOT BUILD STARTS HERE -->
 
     <link name="base_link">
-        <visual>
-            <geometry>
-                <cylinder length="0.05" radius="0.05"/>
-            </geometry>
-            <origin xyz="0 0 0.025"/>
-            <material name="blue"/>
-        </visual>
+
     </link>
     <xacro:default_link joint_params="${joint2_params}"/>
     <xacro:default_link joint_params="${joint3_params}"/>
@@ -58,14 +64,14 @@
     <link name="link3">
         <visual>
             <geometry>
-                <cylinder length="0.05" radius="0.02"/>
+                <box size="${tool_length} ${link_width} ${link_width}"/>
             </geometry>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <material name="blue"/>
+            <origin xyz="0.1 0 0" rpy="0 0 0"/>
+            <material name="yellow"/>
         </visual>
     </link>
 
-    <joint name="joint1" type="continuous">
+    <joint name="joint1" type="fixed">
         <parent link="base_link"/>
         <child link="link1"/>
         <origin xyz="${joint1_params['xyz']}" rpy="${joint1_params['rpy']}"/>
