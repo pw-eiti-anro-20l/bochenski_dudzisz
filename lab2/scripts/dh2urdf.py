@@ -26,7 +26,6 @@ with open('../param_files/urdf_params.yaml', 'w') as output_file:
 		output_file.write("- nr: {}".format(row_number) + "\n")
 		output_file.write("  xyz: {} {} {}".format(*xyz) + "\n")
 		output_file.write("  rpy: {} {} {}".format(*rpy) + "\n")
-		output_file.write("  link_xyz: {} 0 0".format(xyz[0] / 2) + "\n") # to sprawdzic czemu
+		output_file.write("  link_xyz: {} 0 0".format(xyz[0] / 2) + "\n")
 		output_file.write("  link_rpy: 0 0 0\n")
 		output_file.write("  link_length: {}".format(a) + "\n")
-#ze sciezkami poprawic
