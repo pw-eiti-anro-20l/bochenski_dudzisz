@@ -1,12 +1,14 @@
 <launch>
 
     <rosparam command="load" file="$(find lab2)/param_files/urdf_params.yaml"/> 
+    <arg name="gui" default="true" /> 
     <arg name="rvizconfig" default="$(find lab2)/rviz/urdf.rviz" />
-  
-    <param name="robot_description" command="xacro '$(find lab2)/urdf/static_robot.xacro'"/>
+     
+    <param name="robot_description" command="xacro '$(find lab2)/urdf/moving_robot.xacro'"/>
+    <param name="use_gui" value="$(arg gui)"/>
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
     
 </launch>
-

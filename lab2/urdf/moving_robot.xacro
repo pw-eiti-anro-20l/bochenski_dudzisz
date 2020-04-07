@@ -18,12 +18,13 @@
     <xacro:property name="base_radius" value="0.1"/>
     
     <!-- macros -->
-    <xacro:macro name="default_joint" params="joint_params number">
-        <joint name="link${number-1}_to_link_${number}" type="fixed">
+    <xacro:macro name="default_joint" params="joint_params number min max">
+        <joint name="link${number-1}_to_link_${number}" type="revolute">
             <parent link="link_${number-1}"/>
             <child link="link_${number}"/>
             <origin xyz="${joint_params['xyz']}" rpy="${joint_params['rpy']}"/>
             <axis xyz="0.0 0.0 1.0"/>
+            <limit effort="1000.0" lower="${min}" upper="${max}" velocity="0.5"/>
         </joint>
     </xacro:macro>
 
@@ -59,9 +60,9 @@
     <link name="base_link">
         <visual>
             <geometry>
-                <cylinder length="${base_length}" radius="${base_radius}"/>
+                <box size="${link_width} ${link_width} ${link_width}"/>
             </geometry>
-            <origin xyz="0 0 ${base_length/-2}"/>
+            <origin xyz="0 0 0"/>
             <material name="green"/>
         </visual>
     </link>
@@ -72,20 +73,20 @@
         <visual>
             <geometry>
                 <cylinder length="${tool_length}" radius="${link_width/2}"/>
-                
             </geometry>
             <origin xyz="${tool_length/2} 0 0" rpy="0 1.57 0"/>
             <material name="yellow"/>
         </visual>
     </link>
 
-    <joint name="base_to_link_1" type="fixed">
+    <joint name="base_to_link_1" type="revolute">
         <parent link="base_link"/>
         <child link="link_1"/>
         <origin xyz="${joint1_params['xyz']}" rpy="${joint1_params['rpy']}"/>
         <axis xyz="0 0 1"/>
+        <limit effort="1000.0" lower="-3.1415" upper="3.1415" velocity="0.5"/>
     </joint>
-    <xacro:default_joint joint_params="${joint2_params}" number="2"/>
-    <xacro:default_joint joint_params="${joint3_params}" number="3"/>
+    <xacro:default_joint joint_params="${joint2_params}" number="2" min="-3.14" max="0"/>
+    <xacro:default_joint joint_params="${joint3_params}" number="3" min="-1.57" max="1.57"/>
 
 </robot>
