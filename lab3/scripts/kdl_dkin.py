@@ -8,6 +8,12 @@ import rospy
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped
 
+def checkRestrictions(data, rest):
+    for i in range(1,4):
+        if data.position[i-1] < rest["i" + str(i)][0] or data.position[i-1] > rest["i" + str(i)][1]:
+            return False
+    return True
+
 def getParams():
     path = os.path.realpath(__file__)
     with open(os.path.dirname(path) + '/../param_files/dh_file.json') as input_file:
@@ -15,6 +21,10 @@ def getParams():
     return params
 
 def callback(data):
+    if not checkRestrictions(data, rest):
+        rospy.logerr('Position not possible')
+        return
+
     chain = Chain()
     angles = JntArray(3)
     kdl_frame = Frame()
@@ -56,9 +66,13 @@ def kdl_dkin():
     rospy.spin()
 
 if __name__ == '__main__':
-    params = getParams()    
+    params = getParams()
+
+    rest = {}
+    path = os.path.realpath(__file__)
+    with open(os.path.dirname(path) + '/../restrictions.json') as input_file:
+        rest = json.loads(input_file.read(), object_pairs_hook=OrderedDict) 
     try:
         kdl_dkin()
     except rospy.ROSInterruptException:
         pass
-
