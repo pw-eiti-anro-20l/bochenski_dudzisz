@@ -50,7 +50,7 @@ def callback(data):
     pub = rospy.Publisher('kdl_dkin_msgs', PoseStamped, queue_size=10)
     pub.publish(poseStamped)
 
-def nonkdl_dkin():
+def kdl_dkin():
     rospy.init_node('KDL_DKIN', anonymous=True)
     rospy.Subscriber("joint_states", JointState, callback)
     rospy.spin()
@@ -58,7 +58,7 @@ def nonkdl_dkin():
 if __name__ == '__main__':
     params = getParams()    
     try:
-        nonkdl_dkin()
+        kdl_dkin()
     except rospy.ROSInterruptException:
         pass
 
