@@ -4,8 +4,10 @@ import rospy
 from lab4.srv import OintServiceStruct
 from geometry_msgs.msg import PoseStamped
 import math
+from nav_msgs.msg import Path
 
 
+path = Path()
 freq = 50
 prev_pos = [0., 0., 0., 0., 0., 0., 1.]
 
@@ -51,6 +53,11 @@ def compute_coefs(start_pos, request_pos, time): # wspolczynniki do interpolacji
 		a.append(2. * float(request_pos[i] - start_pos[i]) / time**2)
 	return a
 
+def publish_path(pose):
+	path.header = pose.header
+	path.poses.append(pose)
+	path_pub.publish(path)
+
 
 def handle_interpolation(req):
 	
@@ -75,6 +82,7 @@ def handle_interpolation(req):
 
 			pose = fill_poseStamped(position)
 			pub.publish(pose)
+			publish_path(pose)
 			current_time = current_time + 1. / freq
 			rate.sleep()
 
@@ -86,6 +94,7 @@ def handle_interpolation(req):
 
 			pose = fill_poseStamped(position)
 			pub.publish(pose)
+			publish_path(pose)
 			current_time = current_time + 1. / freq
 			rate.sleep()
 
@@ -96,5 +105,6 @@ def handle_interpolation(req):
 if __name__ == "__main__":
 	rospy.init_node('oint')
 	pub = rospy.Publisher('/oint_pose', PoseStamped, queue_size=10)
-	s = rospy.Service('oint_control_srv', OintServiceStruct, handle_interpolation)
+	path_pub = rospy.Publisher('oint_path', Path, queue_size=10)
+	service = rospy.Service('oint_control_srv', OintServiceStruct, handle_interpolation)
 	rospy.spin()
