@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="lab5_robot">
+
+    <!-- XACRO THINGS -->
+    <!-- loading robot parameters -->
+    <xacro:property name="params_file" value="$(find lab5)/param_files/urdf_params.yaml"/>
+    <xacro:property name="robot_params" value="${load_yaml(params_file)}"/>
+    <xacro:property name="joint1_params" value="${robot_params['nr1']}"/>
+    <xacro:property name="joint2_params" value="${robot_params['nr2']}"/>
+    <xacro:property name="joint3_params" value="${robot_params['nr3']}"/>
+
+
+    <!-- local variables -->
+    <xacro:property name="link_width" value="0.1"/>
+    <xacro:property name="tool_length" value="0.2"/>
+    <xacro:property name="base_length" value="0.1"/>
+    <xacro:property name="base_radius" value="0.1"/>
+    
+    <!-- macros -->
+    <xacro:macro name="default_joint" params="joint_params number min max">
+        <joint name="link${number-1}_to_link_${number}" type="revolute">
+            <parent link="link_${number-1}"/>
+            <child link="link_${number}"/>
+            <origin xyz="${joint_params['xyz']}" rpy="${joint_params['rpy']}"/>
+            <axis xyz="0.0 0.0 1.0"/>
+            <limit effort="1000.0" lower="${min}" upper="${max}" velocity="0.5"/>
+        </joint>
+    </xacro:macro>
+
+    <xacro:macro name="default_link" params="joint_params number">
+        <link name="link_${number-1}">
+            <visual>
+                <geometry>
+                    <box size="${joint_params['link_length']} ${link_width} ${link_width}"/>
+                </geometry>
+                <origin xyz="${joint_params['link_xyz']}" rpy="${joint_params['link_rpy']}"/>
+                <material name="blue"/>
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <!-- materials -->
+
+    <material name="blue">
+        <color rgba="0 0 0.9 1"/>
+    </material>
+
+    <material name="yellow">
+        <color rgba="1 1 0 1"/>
+    </material>
+
+    <material name="green">
+        <color rgba="0 1 0 1"/>
+    </material>
+
+    
+    <!-- ROBOT BUILD STARTS HERE -->
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="${link_width} ${link_width} ${link_width}"/>
+            </geometry>
+            <origin xyz="0 0 0"/>
+            <material name="green"/>
+        </visual>
+    </link>
+    <xacro:default_link joint_params="${joint2_params}" number="2"/>
+    <xacro:default_link joint_params="${joint3_params}" number="3"/>
+    
+    <link name="link_3">
+        <visual>
+            <geometry>
+                <cylinder length="${tool_length}" radius="${link_width/2}"/>
+            </geometry>
+            <origin xyz="${tool_length/2} 0 0" rpy="0 1.57 0"/>
+            <material name="yellow"/>
+        </visual>
+    </link>
+
+    <joint name="base_to_link_1" type="revolute">
+        <parent link="base_link"/>
+        <child link="link_1"/>
+        <origin xyz="${joint1_params['xyz']}" rpy="${joint1_params['rpy']}"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="1000.0" lower="-3.1415" upper="3.1415" velocity="0.5"/>
+    </joint>
+    <xacro:default_joint joint_params="${joint2_params}" number="2" min="-3.14" max="0"/>
+    <xacro:default_joint joint_params="${joint3_params}" number="3" min="-1.57" max="1.57"/>
+
+</robot>
