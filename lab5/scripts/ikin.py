@@ -25,6 +25,7 @@ def checkRestrictions(theta, rest):
     for i in range(1,4):
         if theta[i-1] < rest["i" + str(i)][0] or theta[i-1] > rest["i" + str(i)][1]:
             return False
+
     return True
 
 def fill_jointState(theta):

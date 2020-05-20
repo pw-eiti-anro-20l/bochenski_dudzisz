@@ -39,7 +39,6 @@ def linear_int(start_p, end_p, time, current_time):
     return start_p + (float(end_p - start_p) / time) * current_time
 
 
-
 def quadratic_int(start_p, end_p, time, current_time, a):
     if current_time < time / 2:
         return start_p + a * current_time**2
